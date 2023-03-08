@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Properate Chat</h1>
+
+    <form action="" onsubmit="sendMessage(event)">
+      <input type="text" id="messageText" autocomplete="off" />
+      <button>Send</button>
+    </form>
+
+    <div id="messages"></div>
+
+    <script>
+      // Websocket will kept open until we call ws.close()
+      var ws = new WebSocket("ws://localhost:8000/ws");
+
+      ws.onmessage = function (event) {
+        var messages = document.getElementById("messages");
+        var content = document.createTextNode(event.data);
+        messages.innerHTML = event.data;
+      };
+
+      function sendMessage(event) {
+        var input = document.getElementById("messageText");
+        ws.send(input.value);
+        input.value = "";
+        event.preventDefault();
+      }
+    </script>
+  </body>
+</html>
